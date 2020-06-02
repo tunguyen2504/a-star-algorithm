@@ -1,11 +1,11 @@
 /*
- * City.h
+ * Graph.h
  * Created by Anh Tu on 27/05/2020 - 8:20 PM.
  * Project AStarAlgorithm
  */
 
-#ifndef PATHFINDER_CITY2_H
-#define PATHFINDER_CITY2_H
+#ifndef __GRAPH_H
+#define __GRAPH_H
 
 #include <stdlib.h>
 
@@ -48,7 +48,7 @@ void insertNeighborToCity(struct Neighbor **neighbor, char *name, int distance);
  * @param city
  * @param head
  */
-void insertCityToGraph(struct Graph **city, struct City *head);
+void insertCityToGraph(struct Graph **city, struct Graph *head);
 
 /**
  *
@@ -73,4 +73,4 @@ Neighbor* newNeighbor(char name[], int distance);
  */
 void displayGraph(struct Graph *graph);
 
-#endif //PATHFINDER_CITY2_H
+#endif //__GRAPH_H

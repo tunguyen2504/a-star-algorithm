@@ -1,16 +1,13 @@
 /*
- * City.c
+ * Graph.c
  * Created by Anh Tu on 27/05/2020 - 8:20 PM.
  * Project AStarAlgorithm
  */
 
 #include <stdio.h>
 #include <string.h>
-#include "City.h"
+#include "Graph.h"
 
-/*
- *
- */
 void insertNeighborToCity(struct Neighbor **neighbor, char *name, int distance) {
     struct Neighbor *temp,*current;
     temp=malloc(sizeof(struct Neighbor));
@@ -30,8 +27,7 @@ void insertNeighborToCity(struct Neighbor **neighbor, char *name, int distance) 
     }
 }
 
-
-void insertCityToGraph(struct Graph **graph, struct City *head) {
+void insertCityToGraph(struct Graph **graph, struct Graph *head) {
     struct Graph *temp,*current;
     temp=malloc(sizeof(struct Graph));
     temp->headCity=head;
