@@ -1,5 +1,7 @@
-/* main.c - read file
- * Author: Anh Tu NGUYEN - anh-tu.nguyen@epita.fr
+/*
+ * main.c
+ * Created by Anh Tu on 26/05/2020 - 2:11 AM.
+ * Project AStarAlgorithm
  */
 
 #include <stdio.h>
@@ -52,58 +54,32 @@ int main(int argc, char *argv[]) {
         exit(1);
     }
     char name[50];
-    char *cityName[40];
-    char *neighborName[100];
     int x, y;
     int res;
-    List* l = newList(compString,prString);
-//    struct Neighbor** neighbors = NULL;
-    struct City cities[20];
+    struct Graph* graph = NULL;
     struct City* city = NULL;
-    int i=-1, j=-1;
+    struct Neighbor* neighbor = NULL;
     while ((res = fscanf(file, "%s%d%d", name, &x, &y))) {
 
         if (res == 3) {
-//			printf("\nCity: %s\t\tL1: %d\tL2: %d\n", name, x, y);
-//            if (city != NULL) {
-//                addList(l, &cities[i]);
-//            }
+            if (city) {
+                insertCityToGraph(&graph, city);
+            }
             city = newCity(name, x, y);
-            if (city != NULL) {
-//				addList(l, city);
-                i++;
-                cityName[i] = malloc(sizeof(strlen(city->name) + 1));
-                strcpy(cityName[i], city->name);
-                cities[i].name = cityName[i];
-                cities[i].latitude = city->latitude;
-                cities[i].longitude = city->longitude;
-                cities[i].neighbors = city->neighbors;
-            }
-//            neighbors = NULL;
         } else if (res == 2) {
-//			printf("Neighbor: %s\t\tCost: %d\n", name, x);
-            j++;
-            neighborName[j] = malloc(sizeof(strlen(name) + 1));
-            strcpy(neighborName[j], city->name);
-            insertNeighbor(&cities[i].neighbors, neighborName[j], x);
-//            setNeighborsOfCity(city, *neighbors);
-        } else if (res == EOF) {
-            for (int i=0; i<sizeof(cities)/sizeof(struct City); i++) {
-                if (!cities[i].name) {
-                    break;
-                }
-                displayCity(&cities[i]);
+            neighbor = newNeighbor(name, x);
+            if (neighbor) {
+                insertNeighborToCity(&city->neighbors, neighbor->name, neighbor->distance);
             }
+        } else if (res == EOF) {
+            insertCityToGraph(&graph, city);
             break;
         }
     }
 //	displayList(l);
 //
-
-    free(cityName);
-    free(neighborName);
     fclose(file);
-
+    displayGraph(graph);
 
     return 0;
 }

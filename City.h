@@ -1,32 +1,76 @@
-/* City.h */
+/*
+ * City.h
+ * Created by Anh Tu on 27/05/2020 - 8:20 PM.
+ * Project AStarAlgorithm
+ */
 
-#ifndef __City_H
-#define __City_H
+#ifndef PATHFINDER_CITY2_H
+#define PATHFINDER_CITY2_H
 
 #include <stdlib.h>
-//#include "List.h"
 
-struct Neighbor {
-	char *name;
-	int distance;
-	struct Neighbor *next;
+/**
+ *
+ */
+typedef struct Neighbor {
+    char *name;
+    int distance;
+    struct Neighbor *next;
 } Neighbor;
 
+/**
+ *
+ */
 typedef struct City {
-	char *name;
-	int latitude, longitude;
-	struct Neighbor *neighbors;
-//	struct City *nextCity;
+    char *name;
+    int latitude, longitude;
+    struct Neighbor *neighbors;
 } City;
 
-void insertNeighbor(struct Neighbor **neighbor, char name[], int distance);
+/**
+ *
+ */
+typedef struct Graph {
+    struct City *headCity;
+    struct Graph *next;
+} Graph;
 
-//void insertCity(struct City **city, struct )
+/**
+ *
+ * @param neighbor
+ * @param name
+ * @param distance
+ */
+void insertNeighborToCity(struct Neighbor **neighbor, char *name, int distance);
 
-City* newCity(char name[], int latitude, int longitude);
+/**
+ *
+ * @param city
+ * @param head
+ */
+void insertCityToGraph(struct Graph **city, struct City *head);
 
-void setNeighborsOfCity(struct City *city, struct Neighbor *neighbor);
+/**
+ *
+ * @param name
+ * @param latitude
+ * @param longitude
+ * @return
+ */
+City* newCity(char *name, int latitude, int longitude);
 
-void displayCity(struct City *city);
+/**
+ *
+ * @param name
+ * @param distance
+ * @return
+ */
+Neighbor* newNeighbor(char name[], int distance);
 
-#endif
+/**
+ *
+ * @param graph
+ */
+void displayGraph(struct Graph *graph);
+
+#endif //PATHFINDER_CITY2_H

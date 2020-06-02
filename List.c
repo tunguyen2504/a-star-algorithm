@@ -36,7 +36,7 @@ List * newList (compFun comp, prFun pr) {
 void delList (List* l) {
   Node * tmp = l->head;
   while (tmp) {
-	l->head = tmp->next;
+    l->head = tmp->next;
     tmp->next = available;
     available = tmp;
     tmp = l->head;
@@ -63,7 +63,7 @@ status nthInList (List* l, int pos, void* res) {
 status addListAt (List* l, int pos, void* elt) {
   if (pos <= 0 || pos > l->nelts+1)
     return ERRINDEX;
- 
+
   /* get a new Node and increment length */
   Node * toAdd = available;
   if (!toAdd) toAdd = (Node*) malloc(sizeof(Node));
@@ -71,20 +71,20 @@ status addListAt (List* l, int pos, void* elt) {
   if (!toAdd) return ERRALLOC;
   l->nelts++;
   toAdd->val = elt;
-  
+
   /* if pos is 1, must change list head */
   if (pos == 1) {
     toAdd->next = l->head;
     l->head = toAdd;
   }
-  
-  /* otherwise we need a temporary pointer */
+
+    /* otherwise we need a temporary pointer */
   else {
     Node * tmp = l->head;
-    
+
     /* tmp points to the predecessor */
     while (pos-- > 2) tmp = tmp->next;
-    
+
     /* actual insertion */
     toAdd->next = tmp->next;
     tmp->next = toAdd;
@@ -98,20 +98,20 @@ status remFromListAt	(List* l,int pos, void* res) {
   Node *toRem = l->head;
 
   if (pos <= 0 || pos > l->nelts) return ERRINDEX;
-  
+
   /* particular case: must remove list head */
 
   if (pos == 1)
     l->head = toRem->next;
-  
-  /* otherwise point to predecessor to change links */
+
+    /* otherwise point to predecessor to change links */
   else {
     Node * prec = toRem;
     while (pos-- > 2) prec = prec->next;
     toRem = prec->next;
     prec->next = toRem->next;
   }
-  
+
   *(void**)res = toRem->val;
   toRem->next = available;
   available = toRem;
@@ -126,19 +126,19 @@ status remFromList (List* l, void* elt) {
   if (l->comp == 0) return ERRUNABLE;
   if (l->nelts == 0) return ERRABSENT;
   if (!(l->comp)(elt,prec->val)) return remFromListAt(l,1,&(prec->val));
-  
+
   /* points to the predecessor */
 
   while (prec->next &&  (l->comp)(elt,prec->next->val))
-    {
-      prec = prec->next;
-    }
-  
+  {
+    prec = prec->next;
+  }
+
   /* here
    *  - either we point to the last element
    *  - or next one is the one to remove!
    */
-  
+
   if (! prec->next) return ERRABSENT;
 
   toRem = prec->next;
@@ -187,11 +187,11 @@ static Node* previous(List* l, void* e) {
   Node * prec = l->head;
   if (l->nelts == 0) return 0;
   if (!(l->comp)(e,prec->val)) return (Node*)1;
-  
+
   /* prec must address element prior to the one to remove */
   while (prec->next && (l->comp)(e,prec->next->val))
     prec = prec->next;
-  
+
   /* here, 
    *  - either we address nothing (no such element)
    *  - or we address the element prior to the one we're looking for
@@ -202,7 +202,7 @@ static Node* previous(List* l, void* e) {
 /* add given element to given list according to compFun function */
 status addList (List* l, void* e) {
   Node * prec = l->head, *toAdd;
-  
+
   if (l->comp == 0) return ERRUNABLE;
 
   /* add to the head if list is empty, if no comparison function is given
@@ -213,7 +213,7 @@ status addList (List* l, void* e) {
 
   /* otherwise, get predecessor and link new element just after it */
   while (prec && prec->next && (l->comp)(prec->next->val,e)<0)
-	  prec = prec->next;
+    prec = prec->next;
 
   toAdd = available;
   if (!toAdd) toAdd = (Node*) malloc(sizeof(Node));

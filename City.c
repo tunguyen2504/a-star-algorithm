@@ -1,9 +1,17 @@
-/* City.c */
+/*
+ * City.c
+ * Created by Anh Tu on 27/05/2020 - 8:20 PM.
+ * Project AStarAlgorithm
+ */
 
 #include <stdio.h>
+#include <string.h>
 #include "City.h"
 
-void insertNeighbor(struct Neighbor **neighbor, char *name, int distance) {
+/*
+ *
+ */
+void insertNeighborToCity(struct Neighbor **neighbor, char *name, int distance) {
     struct Neighbor *temp,*current;
     temp=malloc(sizeof(struct Neighbor));
     temp->name=name;
@@ -22,41 +30,65 @@ void insertNeighbor(struct Neighbor **neighbor, char *name, int distance) {
     }
 }
 
+
+void insertCityToGraph(struct Graph **graph, struct City *head) {
+    struct Graph *temp,*current;
+    temp=malloc(sizeof(struct Graph));
+    temp->headCity=head;
+    temp->next=NULL;
+    if((*graph)==NULL){
+        (*graph)=temp;
+    }
+    else{
+        current=(*graph);
+        while(current->next!=NULL){
+            current=current->next;
+        }
+        current->next=temp;
+    }
+}
+
 City* newCity(char *name, int latitude, int longitude) {
 	struct City *city;
 	city=malloc(sizeof(struct City));
-	city->name=name;
+    char *cityName = malloc(sizeof(strlen(name) + 1));
+    strcpy(cityName, name);
+	city->name=cityName;
 	city->latitude=latitude;
 	city->longitude=longitude;
 	city->neighbors=NULL;
-	
+
 	return city;
 }
 
-void setNeighborsOfCity(struct City *city, struct Neighbor *neighbors) {
-	city->neighbors = neighbors;
+Neighbor* newNeighbor(char *name, int distance) {
+    struct Neighbor *neighbor;
+    neighbor=malloc(sizeof(struct Neighbor));
+    char *neighborName = malloc(sizeof(strlen(name) + 1));
+    strcpy(neighborName, name);
+    neighbor->name=neighborName;
+    neighbor->distance=distance;
+    neighbor->next=NULL;
 }
 
-void displayCity(struct City *city) {
-    struct City *current;
-    struct Neighbor *currentlist;
-    current=city;
-//    while(current!=NULL){
-//        currentlist=current->start;
-        printf("City: %s\n", current->name);
-        printf("X: %d, Y: %d\n", current->latitude, current->longitude);
-        currentlist = current->neighbors;
+void displayGraph(struct Graph *graph) {
+    int i=1;
+    struct Graph *currentGraph;
+    struct City *currentCity;
+    struct Neighbor *currentNeighbor;
+    currentGraph=graph;
+    while(currentGraph!=NULL){
+        currentCity=currentGraph->headCity;
+        printf("City %d: %s\n", i, currentCity->name);
+        printf("L1: %d, L2: %d\n", currentCity->latitude, currentCity->longitude);
+        currentNeighbor=currentCity->neighbors;
         printf("Neighbors: \n");
-        while(currentlist!=NULL) {
-            printf("Name: %s\tDistance: %d\n", currentlist->name, currentlist->distance);
-            currentlist=currentlist->next;
+        while(currentNeighbor!=NULL){
+            printf("Name: %s\tDistance: %d\n", currentNeighbor->name, currentNeighbor->distance);
+            currentNeighbor=currentNeighbor->next;
         }
-//        while(currentlist!=NULL){
-//            printf("%d ",currentlist->Data);
-//            currentlist=currentlist->next;
-//        }
-//        i++;
+        i++;
         printf("\n");
-//        current=current->listnext;
-//    }
+        currentGraph=currentGraph->next;
+    }
 }
