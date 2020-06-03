@@ -8,22 +8,24 @@
 #include <string.h>
 #include "City.h"
 
-void insertNeighborToCity(Neighbor **neighbor, char *name, int distance) {
+void insertNeighborToCity(City *city, char *name, int distance) {
     Neighbor *temp,*current;
     temp=malloc(sizeof(Neighbor));
     temp->name=name;
     temp->distance=distance;
     temp->next=NULL;
 
-    if((*neighbor)==NULL){
-        (*neighbor)=temp;
+    if(city->neighbors==NULL){
+        city->neighbors=temp;
+        city->neighborCount++;
     }
     else{
-        current=(*neighbor);
+        current=city->neighbors;
         while(current->next!=NULL){
             current=current->next;
         }
         current->next=temp;
+        city->neighborCount++;
     }
 }
 
@@ -37,7 +39,9 @@ City* newCity(char *name, int latitude, int longitude) {
 	city->longitude=longitude;
 	city->distFromStart=0;
 	city->distToGoal=0;
+	city->neighborCount=0;
 	city->neighbors=NULL;
+	city->preCity=NULL;
 
 	return city;
 }
@@ -50,4 +54,8 @@ Neighbor* newNeighbor(char *name, int distance) {
     neighbor->name=neighborName;
     neighbor->distance=distance;
     neighbor->next=NULL;
+}
+
+int isNamedBy(City *city, char *name) {
+    return strcmp(city->name, name);
 }

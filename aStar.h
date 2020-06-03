@@ -7,6 +7,11 @@
 #ifndef __ASTAR_H
 #define __ASTAR_H
 
+#include "List.h"
+#include "City.h"
 
+int findShortestPath(List* cityList, List* openList, List* closeList, City* startCity, City* goalCity, List* res);
+
+void forEachNeighbor(List* cityList, List* openList, List* closeList, City* city);
 
 #endif //__ASTAR_H

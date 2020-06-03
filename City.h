@@ -25,7 +25,9 @@ typedef struct City {
     char *name;
     int latitude, longitude;
     int distFromStart, distToGoal;
+    int neighborCount;
     struct Neighbor *neighbors;
+    struct City *preCity;
 } City;
 
 /**
@@ -34,7 +36,7 @@ typedef struct City {
  * @param name
  * @param distance
  */
-void insertNeighborToCity(Neighbor **neighbor, char *name, int distance);
+void insertNeighborToCity(City *city, char *name, int distance);
 
 /**
  *
@@ -51,6 +53,13 @@ City* newCity(char *name, int latitude, int longitude);
  * @param distance
  * @return
  */
-Neighbor* newNeighbor(char name[], int distance);
+Neighbor* newNeighbor(char *name, int distance);
+
+/**
+ *
+ * @param name
+ * @return
+ */
+int isNamedBy(City *city, char *name);
 
 #endif //__GRAPH_H
