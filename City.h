@@ -1,4 +1,4 @@
-/*
+/**
  * Graph.h
  * Created by Anh Tu on 27/05/2020 - 8:20 PM.
  * Project AStarAlgorithm
@@ -8,9 +8,10 @@
 #define __GRAPH_H
 
 #include <stdlib.h>
+#include "status.h"
 
 /**
- *
+ * A linked list of neighbors
  */
 typedef struct Neighbor {
     char *name;
@@ -19,7 +20,7 @@ typedef struct Neighbor {
 } Neighbor;
 
 /**
- *
+ * A type of City, containing a list of neighbors and a pointer to previous visited city
  */
 typedef struct City {
     char *name;
@@ -31,35 +32,42 @@ typedef struct City {
 } City;
 
 /**
- *
- * @param neighbor
- * @param name
- * @param distance
+ * Function for adding neighbor to an existing city
+ * @param city that needed to add neighbors
+ * @param name the name of neighbor
+ * @param distance the distance from the city to that neighbor
  */
-void insertNeighborToCity(City *city, char *name, int distance);
+status insertNeighborToCity(City *city, char *name, int distance);
 
 /**
- *
- * @param name
- * @param latitude
- * @param longitude
- * @return
+ * Function to create new city that identified by name, latitude, and longitude
+ * @param name the name of city
+ * @param latitude the latitude of city
+ * @param longitude the longitude of city
+ * @return a city with name, latitude, and longitude
+ * @return NULL otherwise
  */
 City* newCity(char *name, int latitude, int longitude);
 
 /**
- *
- * @param name
- * @param distance
- * @return
+ * Function to create new neighbor
+ * @param name the name of neighbor
+ * @param distance the distance from the city to the neighbor
+ * @return a neighbor with name and distance
+ * @return NULL otherwise
  */
 Neighbor* newNeighbor(char *name, int distance);
 
 /**
- *
- * @param name
- * @return
+ * destroy the city by deallocating used memory
+ * @param city the city to be destroyed
  */
-int isNamedBy(City *city, char *name);
+void delCity(City *city);
+
+/**
+ * destroy the neighbor by deallocating used memory
+ * @param neighbor the neighbor to be destroyed
+ */
+void delNeighbor(Neighbor *neighbor);
 
 #endif //__GRAPH_H

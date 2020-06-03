@@ -1,4 +1,4 @@
-/*
+/**
  * Graph.c
  * Created by Anh Tu on 27/05/2020 - 8:20 PM.
  * Project AStarAlgorithm
@@ -8,9 +8,11 @@
 #include <string.h>
 #include "City.h"
 
-void insertNeighborToCity(City *city, char *name, int distance) {
+/** add neighbor to neighborList of city */
+status insertNeighborToCity(City *city, char *name, int distance) {
     Neighbor *temp,*current;
     temp=malloc(sizeof(Neighbor));
+    if (!temp) return ERRALLOC;
     temp->name=name;
     temp->distance=distance;
     temp->next=NULL;
@@ -18,6 +20,7 @@ void insertNeighborToCity(City *city, char *name, int distance) {
     if(city->neighbors==NULL){
         city->neighbors=temp;
         city->neighborCount++;
+        return OK;
     }
     else{
         current=city->neighbors;
@@ -26,12 +29,15 @@ void insertNeighborToCity(City *city, char *name, int distance) {
         }
         current->next=temp;
         city->neighborCount++;
+        return OK;
     }
 }
 
+/** create a new city by name, latitude, and longitude */
 City* newCity(char *name, int latitude, int longitude) {
 	City *city;
 	city=malloc(sizeof(City));
+	if (!city) return NULL;
     char *cityName = malloc(sizeof(strlen(name) + 1));
     strcpy(cityName, name);
 	city->name=cityName;
@@ -46,16 +52,42 @@ City* newCity(char *name, int latitude, int longitude) {
 	return city;
 }
 
+/** create a new neighbor by name and distance from city to neighbor */
 Neighbor* newNeighbor(char *name, int distance) {
     Neighbor *neighbor;
     neighbor=malloc(sizeof(Neighbor));
+    if (!neighbor) return NULL;
     char *neighborName = malloc(sizeof(strlen(name) + 1));
     strcpy(neighborName, name);
     neighbor->name=neighborName;
     neighbor->distance=distance;
     neighbor->next=NULL;
+
+    return neighbor;
 }
 
-int isNamedBy(City *city, char *name) {
-    return strcmp(city->name, name);
+/** destroy the city by deallocating used memory */
+void delCity(City *city) {
+    city->name = NULL;
+    city->latitude = NULL;
+    city->longitude = NULL;
+    city->distFromStart = NULL;
+    city->distToGoal = NULL;
+    city->neighborCount = NULL;
+    city->neighbors = NULL;
+    city->preCity = NULL;
+    free(city);
+}
+
+/** destroy the neighbor by deallocating used memory */
+void delNeighbor(Neighbor *neighbor) {
+    Neighbor *tmp = neighbor->next;
+    while (tmp) {
+        neighbor->next = tmp->next;
+        tmp->next = NULL;
+        tmp = neighbor->next;
+    }
+    neighbor->name = NULL;
+    neighbor->distance = NULL;
+    free(neighbor);
 }

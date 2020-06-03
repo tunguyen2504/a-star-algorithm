@@ -11,4 +11,4 @@ add_executable(AStarAlgorithm City.c
         main.c
         status.c
         status.h
-        tList.c aStar.c aStar.h)
+        aStar.c aStar.h)
