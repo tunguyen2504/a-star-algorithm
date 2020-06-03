@@ -24,16 +24,9 @@ typedef struct Neighbor {
 typedef struct City {
     char *name;
     int latitude, longitude;
+    int distFromStart, distToGoal;
     struct Neighbor *neighbors;
 } City;
-
-/**
- *
- */
-typedef struct Graph {
-    struct City *headCity;
-    struct Graph *next;
-} Graph;
 
 /**
  *
@@ -41,14 +34,7 @@ typedef struct Graph {
  * @param name
  * @param distance
  */
-void insertNeighborToCity(struct Neighbor **neighbor, char *name, int distance);
-
-/**
- *
- * @param city
- * @param head
- */
-void insertCityToGraph(struct Graph **city, struct Graph *head);
+void insertNeighborToCity(Neighbor **neighbor, char *name, int distance);
 
 /**
  *
@@ -66,11 +52,5 @@ City* newCity(char *name, int latitude, int longitude);
  * @return
  */
 Neighbor* newNeighbor(char name[], int distance);
-
-/**
- *
- * @param graph
- */
-void displayGraph(struct Graph *graph);
 
 #endif //__GRAPH_H

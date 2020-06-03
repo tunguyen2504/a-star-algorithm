@@ -3,12 +3,12 @@ project(AStarAlgorithm C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(AStarAlgorithm Graph.c
-        Graph.h
+add_executable(AStarAlgorithm City.c
+        City.h
         FRANCE.MAP
         List.c
         List.h
         main.c
         status.c
         status.h
-        tList.c)
+        tList.c aStar.c aStar.h)
