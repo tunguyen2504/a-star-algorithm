@@ -12,7 +12,8 @@
 #include "aStar.h"
 #include "status.h"
 
-/** static to store start and goal city and their names */
+/** static to store filename, start and goal city and their names */
+static char* fileName;
 static char* startName;
 static char* goalName;
 static City* startCity = NULL;
@@ -47,7 +48,7 @@ static int compCityByF (void * s1, void * s2) {
 }
 
 /**
- * function to display a city details
+ * function to display a list of city in details
  * @param s the city to be displayed
  */
 static void prCity(void * s) {
@@ -97,29 +98,28 @@ static void calculateGAndH(void * s) {
         currentCity->distToGoal = (abs(currentCity->latitude - goalCity->latitude) + abs(currentCity->longitude - goalCity->longitude))/4;
     } else if (currentCity == goalCity) {
         /* g = plus infinite */
-        currentCity->distFromStart = 100000;
+        currentCity->distFromStart = 10000;
         currentCity->distToGoal = 0;
     } else {
-        currentCity->distFromStart = 100000;
+        currentCity->distFromStart = 10000;
         currentCity->distToGoal = (abs(currentCity->latitude - goalCity->latitude) + abs(currentCity->longitude - goalCity->longitude))/4;
     }
 }
 
 /**
  * function to check if input city name is correct
- * @param filename the file path of MAP file
  * @param cityName the name of city to be checked
  * @return 1 if input name is correct
  * @return 0 otherwise
  */
-static int checkCityName(char* filename, char* cityName) {
+static int checkCityName(char* cityName) {
     char temp[100];
     const char delimiter[] = "\t\t";
     char *token, *line;
 
-    FILE* file = fopen(filename, "r");
+    FILE* file = fopen(fileName, "r");
     if (!file) {
-        perror("Error opening file");
+        perror("\nError opening file");
         exit(2);
     }
 
@@ -140,40 +140,48 @@ static int checkCityName(char* filename, char* cityName) {
         }
     }
 
-    printf("The city with name \"%s\" is not correct. Please try again.\n", cityName);
+    printf("\nThe city with name \"%s\" is not correct. Please try again.\n", cityName);
     fclose(file);
     return 0;
 }
 
 int main(int argc, char *argv[]) {
     FILE *file;
-    char *filename;
-    if (argc < 2) {
-        printf("Missing Filename.\n");
-        exit(2);
-    }
-    if (argc == 2) {
-        filename = argv[1];
-        char start[20], goal[20];
-        printf("\nPlease enter start city: ");
-        scanf("%[^\n]%*c", start);
-        printf("\nPlease enter destination city: ");
-        scanf("%[^\n]%*c", goal);
-        startName = start;
-        goalName = goal;
-    } else if (argc == 4) {
-        filename = argv[1];
-        startName = argv[2];
-        goalName = argv[3];
+    /* check program input argument */
+    switch(argc) {
+        case 1:
+            printf("\nMissing file name. Please try again.\n");
+            exit(2);
+        case 2:
+            fileName = argv[1];
+            char start[20], goal[20];
+            printf("\nPlease enter start city: ");
+            scanf("%[^\n]%*c", start);
+            printf("\nPlease enter destination city: ");
+            scanf("%[^\n]%*c", goal);
+            startName = strdup(start);
+            goalName = strdup(goal);
+            break;
+        case 3:
+            printf("\nMissing start/destination city. Please enter a pair of start and destination city.\n");
+            exit(1);
+        case 4:
+            fileName = argv[1];
+            startName = argv[2];
+            goalName = argv[3];
+            break;
+        default:
+            printf("\nInvalid number of arguments. Please try again.\n");
+            exit(1);
     }
 
-    if (!checkCityName(filename, startName) || !checkCityName(filename, goalName)) {
+    if (!checkCityName(startName) || !checkCityName(goalName)) {
         exit(1);
     };
 
-    file = fopen(filename, "r");
+    file = fopen(fileName, "r");
     if (!file) {
-        perror("Error opening file");
+        perror("\nError opening file");
         exit(2);
     }
 
@@ -215,7 +223,7 @@ int main(int argc, char *argv[]) {
     /* start A* algorithm */
     findShortestPath(cityList, openList, closeList, startCity, goalCity, finalPath);
 
-    printf("The shortest path from %s to %s:\n", startCity->name, goalCity->name);
+    printf("\nThe shortest path from %s to %s:\n", startCity->name, goalCity->name);
     displayList(finalPath);
     printf("\n");
     printf("\nTotal distance: %d\n", goalCity->distFromStart);

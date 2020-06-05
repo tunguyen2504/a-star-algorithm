@@ -69,11 +69,11 @@ Neighbor* newNeighbor(char *name, int distance) {
 /** destroy the city by deallocating used memory */
 void delCity(City *city) {
     city->name = NULL;
-    city->latitude = NULL;
-    city->longitude = NULL;
-    city->distFromStart = NULL;
-    city->distToGoal = NULL;
-    city->neighborCount = NULL;
+    city->latitude = 0;
+    city->longitude = 0;
+    city->distFromStart = 0;
+    city->distToGoal = 0;
+    city->neighborCount = 0;
     city->neighbors = NULL;
     city->preCity = NULL;
     free(city);
@@ -88,6 +88,6 @@ void delNeighbor(Neighbor *neighbor) {
         tmp = neighbor->next;
     }
     neighbor->name = NULL;
-    neighbor->distance = NULL;
+    neighbor->distance = 0;
     free(neighbor);
 }
